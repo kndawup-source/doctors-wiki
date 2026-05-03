@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>닥터스위키</title>
+<meta name="description" content="증상별 건강 정보를 쉽고 빠르게 확인하세요.">
 
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -27,18 +28,9 @@ a{color:inherit;text-decoration:none}
   border:1px solid #d8e8ff;
 }
 .curation-head{margin-bottom:14px}
-.curation-label{
-  font-size:11px;
-  font-weight:900;
-  color:#1677ff;
-  letter-spacing:.12em;
-}
-.curation-title{
-  margin-top:4px;
-  font-size:24px;
-  font-weight:900;
-  letter-spacing:-.05em;
-}
+.curation-label{font-size:11px;font-weight:900;color:#1677ff;letter-spacing:.12em}
+.curation-title{margin-top:4px;font-size:24px;font-weight:900;letter-spacing:-.05em}
+
 .pick-card{
   width:100%;
   display:block;
@@ -65,12 +57,6 @@ a{color:inherit;text-decoration:none}
   color:#fff;
   font-size:12px;
   font-weight:900;
-}
-.pick-category,.article-category{
-  font-size:12px;
-  color:var(--accent,#1677ff);
-  font-weight:900;
-  margin-bottom:6px;
 }
 .pick-title{
   font-size:21px;
@@ -123,6 +109,12 @@ a{color:inherit;text-decoration:none}
   text-align:left;
   transition:.12s ease;
 }
+.article-category{
+  font-size:12px;
+  color:var(--accent,#1677ff);
+  font-weight:900;
+  margin-bottom:6px;
+}
 .article-title{
   font-size:19px;
   font-weight:900;
@@ -159,11 +151,40 @@ a{color:inherit;text-decoration:none}
   color:#344054;
 }
 .article-detail-body{
+  margin-top:18px;
+  padding:20px;
+  border-radius:22px;
+  background:#fff;
+  border:1px solid #e5edf5;
   font-size:18px;
-  line-height:1.7;
+  line-height:1.75;
   color:#263445;
-  white-space:pre-line;
 }
+.content-heading{
+  margin:26px 0 10px;
+  font-size:22px;
+  line-height:1.35;
+  font-weight:900;
+  letter-spacing:-.04em;
+  color:#111827;
+}
+.content-heading:first-child{margin-top:0}
+.content-paragraph{
+  margin:0 0 14px;
+  font-size:18px;
+  line-height:1.75;
+  color:#263445;
+}
+.notice-box{
+  margin:18px 0;
+  padding:16px;
+  border-radius:18px;
+  font-size:16px;
+  line-height:1.55;
+  font-weight:800;
+}
+.notice-box.warning{background:#fff7ed;color:#9a3412}
+.notice-box.tip{background:#eef6ff;color:#175cd3}
 .article-meta{
   margin-bottom:12px;
   font-size:13px;
@@ -185,7 +206,7 @@ a{color:inherit;text-decoration:none}
 .cta-main{
   width:100%;
   min-height:66px;
-  margin-top:18px;
+  margin-top:24px;
   border-radius:20px;
   background:#12b76a;
   color:#fff;
@@ -275,7 +296,7 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.0.5</div>
+    <div class="app-version">닥터스위키 · v1.0.8</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
@@ -302,6 +323,44 @@ function safe(v){
     .replaceAll("'","&#039;");
 }
 
+function normalizeCategory(category){
+  return String(category || "기타").trim();
+}
+
+function formatContent(content){
+  return String(content || "")
+    .split("\n")
+    .map(line=>{
+      const text=line.trim();
+
+      if(!text) return `<br>`;
+
+      if(text.startsWith("주의:")){
+        return `<div class="notice-box warning">⚠️ ${safe(text.replace("주의:","").trim())}</div>`;
+      }
+
+      if(text.startsWith("팁:")){
+        return `<div class="notice-box tip">💡 ${safe(text.replace("팁:","").trim())}</div>`;
+      }
+
+      if(
+        text.startsWith("#") ||
+        text.startsWith("✔") ||
+        text.startsWith("1.") ||
+        text.startsWith("2.") ||
+        text.startsWith("3.") ||
+        text.startsWith("4.") ||
+        text.startsWith("5.") ||
+        text.endsWith("?")
+      ){
+        return `<h3 class="content-heading">${safe(text.replace(/^#+\s*/,""))}</h3>`;
+      }
+
+      return `<p class="content-paragraph">${safe(text)}</p>`;
+    })
+    .join("");
+}
+
 function categoryStyle(category){
   const styles={
     "치과":{accent:"#1677ff",soft:"#eef6ff"},
@@ -313,7 +372,7 @@ function categoryStyle(category){
     "이비인후과":{accent:"#db2777",soft:"#fdf2f8"}
   };
 
-  const s=styles[category] || {accent:"#1677ff",soft:"#eef6ff"};
+  const s=styles[normalizeCategory(category)] || {accent:"#1677ff",soft:"#eef6ff"};
   return `--accent:${s.accent};--soft:${s.soft};`;
 }
 
@@ -333,6 +392,15 @@ function saveClick(type,key){
   }catch(e){}
 }
 
+function updateMeta(article){
+  document.title=`${article.title || "닥터스위키"} | 닥터스위키`;
+
+  const metaDesc=document.querySelector('meta[name="description"]');
+  if(metaDesc){
+    metaDesc.setAttribute("content",article.summary || "증상별 건강 정보를 쉽고 빠르게 확인하세요.");
+  }
+}
+
 async function loadArticles(){
   $("articleList").innerHTML=`<div class="empty-text">건강 정보를 불러오는 중입니다.</div>`;
 
@@ -349,14 +417,24 @@ async function loadArticles(){
     return;
   }
 
-  allArticles=data || [];
+  allArticles=(data || []).map(article=>({
+    ...article,
+    category:normalizeCategory(article.category)
+  }));
+
   renderCategoryTabs();
   renderPopularArticles();
   renderArticles();
+
+  const path=decodeURIComponent(location.pathname.replace(/^\/+/,"").trim());
+  if(path && path !== "index.html"){
+    const found=allArticles.find(article=>article.slug===path);
+    if(found) showArticle(path,false);
+  }
 }
 
 function renderCategoryTabs(){
-  const categories=["전체",...new Set(allArticles.map(a=>a.category).filter(Boolean))];
+  const categories=["전체",...new Set(allArticles.map(a=>normalizeCategory(a.category)).filter(Boolean))];
 
   $("categoryTabs").innerHTML=categories.map(cat=>`
     <button class="category-tab ${cat===selectedCategory ? "active" : ""}" type="button" data-category="${safe(cat)}">
@@ -376,19 +454,16 @@ function renderCategoryTabs(){
 function renderPopularArticles(){
   const popularSection=$("popularSection");
   const popularList=$("popularList");
-
   const categoryMap={};
 
   allArticles.forEach(article=>{
-    const category=article.category || "기타";
+    const category=normalizeCategory(article.category);
     if(!categoryMap[category]) categoryMap[category]=[];
     categoryMap[category].push(article);
   });
 
   const picks=Object.values(categoryMap)
-    .map(list=>{
-      return list.sort((a,b)=>(b.view_count || 0)-(a.view_count || 0))[0];
-    })
+    .map(list=>list.sort((a,b)=>(b.view_count || 0)-(a.view_count || 0))[0])
     .sort((a,b)=>(b.view_count || 0)-(a.view_count || 0))
     .slice(0,5);
 
@@ -406,8 +481,7 @@ function renderPopularArticles(){
       data-slug="${safe(article.slug)}"
       style="${categoryStyle(article.category)}"
     >
-      ${index===0 ? `<div class="pick-badge">오늘의 추천</div>` : `<div class="pick-badge">${safe(article.category || "추천")}</div>`}
-      <div class="pick-category">${safe(article.category || "의료정보")}</div>
+      <div class="pick-badge">${safe(article.category || "추천")}</div>
       <div class="pick-title">${safe(article.title)}</div>
       <div class="pick-summary">${safe(article.summary || "")}</div>
     </button>
@@ -422,7 +496,8 @@ function renderArticles(){
   const keyword=($("articleSearch").value || "").trim().toLowerCase();
 
   const filtered=allArticles.filter(article=>{
-    const categoryOk=selectedCategory==="전체" || article.category===selectedCategory;
+    const articleCategory=normalizeCategory(article.category);
+    const categoryOk=selectedCategory==="전체" || articleCategory===selectedCategory;
     const text=`${article.title || ""} ${article.summary || ""} ${article.content || ""}`.toLowerCase();
     const keywordOk=!keyword || text.includes(keyword);
     return categoryOk && keywordOk;
@@ -460,12 +535,18 @@ async function increaseViewCount(article){
   }
 }
 
-function showArticle(slug){
+function showArticle(slug,changeUrl=true){
   const article=allArticles.find(a=>a.slug===slug);
   if(!article) return;
 
   $("home").style.display="none";
   $("result").style.display="block";
+
+  if(changeUrl && article.slug){
+    history.pushState(null,"",`/${article.slug}`);
+  }
+
+  updateMeta(article);
 
   $("resultArea").innerHTML=`
     <div class="article-meta">${safe(article.category || "의료정보")}</div>
@@ -482,7 +563,7 @@ function showArticle(slug){
     ` : ""}
 
     <div class="card article-detail-body">
-      ${safe(article.content || "")}
+      ${formatContent(article.content || "")}
     </div>
 
     ${article.cta_text ? `
@@ -553,8 +634,23 @@ function showArticle(slug){
 function goHome(){
   $("result").style.display="none";
   $("home").style.display="block";
+  history.pushState(null,"","/");
+  document.title="닥터스위키";
+  const metaDesc=document.querySelector('meta[name="description"]');
+  if(metaDesc) metaDesc.setAttribute("content","증상별 건강 정보를 쉽고 빠르게 확인하세요.");
   scrollTop();
 }
+
+window.addEventListener("popstate",()=>{
+  const path=decodeURIComponent(location.pathname.replace(/^\/+/,"").trim());
+  if(path){
+    const found=allArticles.find(article=>article.slug===path);
+    if(found) showArticle(path,false);
+  }else{
+    $("result").style.display="none";
+    $("home").style.display="block";
+  }
+});
 
 function scrollTop(){
   setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),0);
