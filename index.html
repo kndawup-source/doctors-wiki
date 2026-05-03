@@ -1,1 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>닥터스위키</title>
 
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;min-height:100%;background:#eef5fb;color:#111827}
+body{font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif}
+button{font-family:inherit;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+.app{max-width:480px;min-height:100vh;margin:0 auto;background:#fff}
+.header{padding:30px 24px 8px}
+.logo{font-size:32px;font-weight:900;color:#1677ff;letter-spacing:-.07em}
+.main{padding:24px}
+.home-title{margin:10px 0 24px;font-size:36px;line-height:1.2;font-weight:900;letter-spacing:-.07em}
+
+.menu{display:grid;gap:14px}
+.menu-btn,.primary,.gray,.cta-main,.related-btn,.product-item{
+  width:100%;
+  border-radius:20px;
+  font-weight:900;
+  transition:.12s ease;
+}
+.menu-btn{
+  min-height:84px;
+  padding:18px 20px;
+  border:2px solid #d8e8ff;
+  background:#f3f8ff;
+  text-align:left;
+  opacity:0;
+  transform:translateY(16px);
+  animation:menuUp .45s ease forwards;
+}
+.menu-btn:nth-child(1){animation-delay:.03s}
+.menu-btn:nth-child(2){animation-delay:.08s}
+.menu-btn:nth-child(3){animation-delay:.13s}
+.menu-btn:nth-child(4){animation-delay:.18s}
+.menu-btn:nth-child(5){animation-delay:.23s}
+.menu-btn:active,.primary:active,.gray:active,.cta-main:active,.related-btn:active,.product-item:active{
+  transform:scale(.96);
+  filter:brightness(.97);
+}
+.menu-name{font-size:26px}
+.menu-sub{margin-top:5px;font-size:17px;color:#667085}
+@keyframes menuUp{to{opacity:1;transform:translateY(0)}}
+
+.result{display:none}
+.topic-title{margin:4px 0 14px;font-size:32px;font-weight:900;line-height:1.25;letter-spacing:-.06em}
+.card{padding:18px;border-radius:22px;background:#f8fafc;border:1px solid #e5edf5}
+.summary{margin-bottom:18px;font-size:19px;line-height:1.55;color:#344054}
+
+.video-box{width:100%;aspect-ratio:9/16;background:#111827;border-radius:24px;overflow:hidden}
+.video-box.mid{aspect-ratio:16/9}
+.video-box iframe{width:100%;height:100%;border:0}
+
+.video-title{margin:16px 0 10px;font-size:25px;font-weight:900;line-height:1.35;letter-spacing:-.04em}
+.check-box{margin-top:12px;font-size:18px;line-height:1.55;color:#263445}
+.check-box b{color:#1677ff}
+
+.cta-main{min-height:66px;margin-top:18px;background:#12b76a;color:#fff;font-size:21px}
+
+.product-box{margin:18px 0}
+.box-title{font-size:20px;font-weight:900;margin-bottom:12px}
+.product-item{
+  display:block;
+  padding:15px 16px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid #e5edf5;
+  margin-bottom:10px;
+  font-size:18px;
+  font-weight:900;
+  text-align:left;
+}
+.partner-note{margin-top:6px;font-size:12px;line-height:1.45;color:#667085}
+
+.ad-box{
+  margin:18px 0;
+  padding:18px;
+  border-radius:20px;
+  background:#fff8e6;
+  color:#6b4f00;
+  font-size:17px;
+  line-height:1.5;
+  text-align:center;
+}
+
+.mid-section{margin-top:20px;padding-top:18px;border-top:1px solid #e5edf5}
+.mid-item{margin-bottom:20px}
+.mid-item:last-child{margin-bottom:0}
+
+.related{margin-top:18px}
+.related-list{display:grid;gap:10px}
+.related-btn{min-height:56px;background:#eef2f7;font-size:18px;color:#263445}
+
+.actions{display:grid;gap:12px;margin-top:18px}
+.primary,.gray{min-height:66px;font-size:21px}
+.primary{background:#1677ff;color:#fff}
+.gray{background:#eef2f7;color:#263445}
+
+.footer{padding:18px 24px 32px;font-size:12px;line-height:1.5;color:#98a2b3}
+.app-version{margin-bottom:6px;font-weight:900;color:#1677ff}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <header class="header">
+    <div class="logo">닥터스위키</div>
+  </header>
+
+  <main class="main">
+    <section id="home">
+      <h1 class="home-title">어디가<br>불편하세요?</h1>
+      <div class="menu" id="menu"></div>
+    </section>
+
+    <section id="result" class="result">
+      <div id="resultArea"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="app-version">닥터스위키 · v1.0.0</div>
+    <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
+  </footer>
+</div>
+
+<script>
+const MENUS=[
+  {key:"gum",name:"잇몸에서 피가 나요",sub:"잇몸 · 치주 · 치과"},
+  {key:"back",name:"허리가 아파요",sub:"허리 · 자세 · 정형외과"},
+  {key:"eye",name:"눈이 건조해요",sub:"눈 · 시력 · 안과"},
+  {key:"sleep",name:"잠이 잘 안 와요",sub:"수면 · 스트레스"},
+  {key:"stomach",name:"속이 불편해요",sub:"소화 · 위장 · 내과"}
+];
+
+const CONTENTS={
+  gum:{
+    title:"잇몸에서 피가 나요",
+    summary:"양치할 때 피가 난다면 잇몸 염증 신호일 수 있습니다. 반복된다면 치과 검진을 받아보는 것이 좋습니다.",
+    short:{id:"dQw4w9WgXcQ",title:"잇몸 피남, 이렇게 보세요",check:"잇몸 출혈이 반복되는지, 붓기나 입 냄새가 함께 있는지 먼저 확인해보세요."},
+    mid:[
+      {id:"dQw4w9WgXcQ",title:"잇몸 출혈 원인 이해하기",reason:"잇몸에서 피가 나는 원인을 조금 더 자세히 이해하기 좋은 추천 영상입니다."},
+      {id:"dQw4w9WgXcQ",title:"잇몸 관리 방법 보기",reason:"생활 속 잇몸 관리 방법을 확인하기 좋은 추천 영상입니다."}
+    ],
+    cta:"상담 가능한 치과 보기",
+    clinicLink:"CLINIC_LINK_GUM",
+    products:[
+      ["부드러운 칫솔 보기","COUPANG_LINK_GUM_1"],
+      ["잇몸 케어 치약 보기","COUPANG_LINK_GUM_2"]
+    ],
+    related:["stomach","eye"]
+  },
+  back:{
+    title:"허리가 아파요",
+    summary:"오래 앉아 있거나 자세가 무너지면 허리에 부담이 커질 수 있습니다. 다리 저림이 함께 있다면 주의가 필요합니다.",
+    short:{id:"dQw4w9WgXcQ",title:"허리 통증, 먼저 확인할 것",check:"통증 위치와 다리 저림 여부를 함께 살펴보는 것이 좋습니다."},
+    mid:[
+      {id:"dQw4w9WgXcQ",title:"허리 통증 원인 이해하기",reason:"허리 통증이 생기는 원인을 더 자세히 이해하기 좋은 추천 영상입니다."},
+      {id:"dQw4w9WgXcQ",title:"허리 통증 관리 방법 보기",reason:"자세와 생활 습관을 점검하는 데 도움이 되는 추천 영상입니다."}
+    ],
+    cta:"정형외과 정보 보기",
+    clinicLink:"CLINIC_LINK_BACK",
+    products:[
+      ["허리 쿠션 보기","COUPANG_LINK_BACK_1"],
+      ["자세 보조용품 보기","COUPANG_LINK_BACK_2"]
+    ],
+    related:["sleep","eye"]
+  },
+  eye:{
+    title:"눈이 건조해요",
+    summary:"눈이 자주 뻑뻑하다면 화면 사용 시간과 실내 환경을 먼저 확인해보세요. 충혈이나 통증이 오래가면 진료가 필요할 수 있습니다.",
+    short:{id:"dQw4w9WgXcQ",title:"눈 건조, 이렇게 관리하세요",check:"화면을 오래 볼 때 눈 깜빡임이 줄어드는지 먼저 확인해보세요."},
+    mid:[
+      {id:"dQw4w9WgXcQ",title:"눈 건조 원인 이해하기",reason:"눈 건조가 생기는 이유를 자세히 이해하기 좋은 추천 영상입니다."},
+      {id:"dQw4w9WgXcQ",title:"안구건조 관리 방법 보기",reason:"생활 속 눈 관리 방법을 확인하기 좋은 추천 영상입니다."}
+    ],
+    cta:"안과 정보 보기",
+    clinicLink:"CLINIC_LINK_EYE",
+    products:[
+      ["눈 온열 마스크 보기","COUPANG_LINK_EYE_1"],
+      ["블루라이트 차단 안경 보기","COUPANG_LINK_EYE_2"]
+    ],
+    related:["sleep","back"]
+  },
+  sleep:{
+    title:"잠이 잘 안 와요",
+    summary:"잠이 잘 오지 않는다면 카페인, 스마트폰, 수면 시간을 먼저 점검해보세요. 오래 지속되면 상담이 도움이 될 수 있습니다.",
+    short:{id:"dQw4w9WgXcQ",title:"잠이 안 올 때 먼저 볼 것",check:"잠들기 전 스마트폰과 늦은 카페인 섭취를 줄이는 것이 중요합니다."},
+    mid:[
+      {id:"dQw4w9WgXcQ",title:"잠이 안 오는 원인 이해하기",reason:"불면과 수면 습관을 더 깊게 이해할 수 있는 추천 영상입니다."},
+      {id:"dQw4w9WgXcQ",title:"수면 습관 관리 방법 보기",reason:"잠들기 전 생활 습관을 점검하기 좋은 추천 영상입니다."}
+    ],
+    cta:"수면 상담 알아보기",
+    clinicLink:"CLINIC_LINK_SLEEP",
+    products:[
+      ["수면 안대 보기","COUPANG_LINK_SLEEP_1"],
+      ["숙면 베개 보기","COUPANG_LINK_SLEEP_2"]
+    ],
+    related:["eye","stomach"]
+  },
+  stomach:{
+    title:"속이 불편해요",
+    summary:"속이 더부룩하거나 불편하다면 식사 습관과 자극적인 음식을 먼저 확인해보세요. 통증이 심하면 진료가 필요합니다.",
+    short:{id:"dQw4w9WgXcQ",title:"속 불편함, 먼저 확인할 것",check:"과식, 야식, 자극적인 음식이 반복되는지 살펴보는 것이 좋습니다."},
+    mid:[
+      {id:"dQw4w9WgXcQ",title:"속이 불편한 원인 이해하기",reason:"소화 불편의 원인을 더 자세히 이해하기 좋은 추천 영상입니다."},
+      {id:"dQw4w9WgXcQ",title:"위장 관리 방법 보기",reason:"식사 습관과 생활 관리를 확인하기 좋은 추천 영상입니다."}
+    ],
+    cta:"내과 정보 보기",
+    clinicLink:"CLINIC_LINK_STOMACH",
+    products:[
+      ["따뜻한 찜질팩 보기","COUPANG_LINK_STOMACH_1"],
+      ["소화 관리용품 보기","COUPANG_LINK_STOMACH_2"]
+    ],
+    related:["sleep","gum"]
+  }
+};
+
+const $=id=>document.getElementById(id);
+
+function safe(v){
+  return String(v??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function videoBlock(id,isMid=false){
+  return `
+    <div class="video-box ${isMid ? "mid" : ""}">
+      <iframe src="https://www.youtube.com/embed/${safe(id)}"></iframe>
+    </div>
+  `;
+}
+
+function saveClick(type,key){
+  try{
+    const logs=JSON.parse(localStorage.getItem("doctorwiki_clicks")||"[]");
+    logs.push({type,key,time:new Date().toISOString()});
+    localStorage.setItem("doctorwiki_clicks",JSON.stringify(logs.slice(-200)));
+  }catch(e){}
+}
+
+function moveTo(url){
+  if(!url || url.includes("_LINK_")){
+    alert("연결 링크를 입력해주세요.");
+    return;
+  }
+  location.href=url;
+}
+
+function renderMenu(){
+  $("menu").innerHTML=MENUS.map(item=>`
+    <button class="menu-btn" type="button" data-key="${safe(item.key)}">
+      <div class="menu-name">${safe(item.name)}</div>
+      <div class="menu-sub">${safe(item.sub)}</div>
+    </button>
+  `).join("");
+
+  document.querySelectorAll(".menu-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>showResult(btn.dataset.key));
+  });
+}
+
+function showResult(key){
+  const d=CONTENTS[key];
+  if(!d) return;
+
+  const related=d.related.map(k=>MENUS.find(m=>m.key===k)).filter(Boolean);
+
+  $("home").style.display="none";
+  $("result").style.display="block";
+
+  $("resultArea").innerHTML=`
+    <div class="topic-title">${safe(d.title)}</div>
+
+    <div class="summary card">${safe(d.summary)}</div>
+
+    ${videoBlock(d.short.id)}
+
+    <div class="video-title">${safe(d.short.title)}</div>
+
+    <div class="check-box card">
+      <b>💡 먼저 확인할 것</b><br>
+      ${safe(d.short.check)}
+    </div>
+
+    <button class="cta-main" type="button" data-role="clinic">
+      🏥 ${safe(d.cta)}
+    </button>
+
+    <div class="product-box card">
+      <div class="box-title">🛒 집에서 관리해보세요</div>
+      ${d.products.map(([name,link],idx)=>`
+        <button class="product-item" type="button" data-link="${safe(link)}" data-index="${idx}">
+          ${safe(name)}
+        </button>
+      `).join("")}
+      <div class="partner-note">파트너스 활동을 통해 일정 수수료를 받을 수 있습니다.</div>
+    </div>
+
+    <div class="ad-box">
+      📢 지금 많이 찾는 건강 정보<br>
+      AdSense 광고 삽입 위치
+    </div>
+
+    <div class="mid-section">
+      ${d.mid.map(item=>`
+        <div class="mid-item">
+          ${videoBlock(item.id,true)}
+          <div class="video-title">${safe(item.title)}</div>
+          <div class="check-box card">
+            <b>📌 핵심 포인트</b><br>
+            ${safe(item.reason)}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="related card">
+      <div class="box-title">이런 증상도 같이 확인해보세요</div>
+      <div class="related-list">
+        ${related.map(item=>`
+          <button class="related-btn" type="button" data-key="${safe(item.key)}">${safe(item.name)}</button>
+        `).join("")}
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" type="button" data-key="${safe(key)}">다른 건강 정보 보기</button>
+      <button class="gray" type="button">처음으로 돌아가기</button>
+    </div>
+  `;
+
+  const clinicBtn=document.querySelector("[data-role='clinic']");
+  if(clinicBtn){
+    clinicBtn.addEventListener("click",()=>{
+      saveClick("clinic",key);
+      moveTo(d.clinicLink);
+    });
+  }
+
+  document.querySelectorAll(".product-item").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      saveClick("product",key);
+      moveTo(btn.dataset.link);
+    });
+  });
+
+  document.querySelectorAll(".related-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>showResult(btn.dataset.key));
+  });
+
+  const primary=document.querySelector(".primary");
+  const gray=document.querySelector(".gray");
+
+  if(primary) primary.addEventListener("click",e=>showResult(e.currentTarget.dataset.key));
+  if(gray) gray.addEventListener("click",goHome);
+
+  saveClick("view",key);
+  scrollTop();
+}
+
+function goHome(){
+  $("result").style.display="none";
+  $("home").style.display="block";
+  scrollTop();
+}
+
+function scrollTop(){
+  setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),0);
+}
+
+renderMenu();
+</script>
+</body>
+</html>
