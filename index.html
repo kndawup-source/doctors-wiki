@@ -19,6 +19,76 @@ a{color:inherit;text-decoration:none}
 .main{padding:24px}
 .home-title{margin:10px 0 18px;font-size:36px;line-height:1.2;font-weight:900;letter-spacing:-.07em}
 
+.curation-section{
+  margin:4px 0 28px;
+  padding:18px;
+  border-radius:26px;
+  background:linear-gradient(180deg,#eef6ff 0%,#ffffff 100%);
+  border:1px solid #d8e8ff;
+}
+.curation-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  margin-bottom:14px;
+}
+.curation-label{
+  font-size:11px;
+  font-weight:900;
+  color:#1677ff;
+  letter-spacing:.12em;
+}
+.curation-title{
+  margin-top:4px;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:-.05em;
+}
+.pick-card{
+  width:100%;
+  display:block;
+  padding:18px;
+  border-radius:22px;
+  background:#fff;
+  border:1px solid #e5edf5;
+  text-align:left;
+  margin-bottom:10px;
+  transition:.12s ease;
+}
+.pick-card:first-child{
+  padding:22px;
+  border:2px solid #1677ff;
+  box-shadow:0 12px 28px rgba(22,119,255,.12);
+}
+.pick-badge{
+  display:inline-flex;
+  margin-bottom:10px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#1677ff;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+}
+.pick-category{
+  font-size:12px;
+  color:#1677ff;
+  font-weight:900;
+  margin-bottom:6px;
+}
+.pick-title{
+  font-size:21px;
+  font-weight:900;
+  line-height:1.35;
+  letter-spacing:-.04em;
+  margin-bottom:6px;
+}
+.pick-summary{
+  font-size:14px;
+  line-height:1.45;
+  color:#667085;
+}
+
 .search-box{margin-bottom:14px}
 .search-input{
   width:100%;
@@ -82,7 +152,7 @@ a{color:inherit;text-decoration:none}
 .menu-btn:nth-child(3){animation-delay:.13s}
 .menu-btn:nth-child(4){animation-delay:.18s}
 .menu-btn:nth-child(5){animation-delay:.23s}
-.menu-btn:active,.primary:active,.gray:active,.cta-main:active,.related-btn:active,.product-item:active,.article-card:active,.category-tab:active{
+.menu-btn:active,.primary:active,.gray:active,.cta-main:active,.related-btn:active,.product-item:active,.article-card:active,.category-tab:active,.pick-card:active{
   transform:scale(.96);
   filter:brightness(.97);
 }
@@ -160,6 +230,16 @@ a{color:inherit;text-decoration:none}
     <section id="home">
       <h1 class="home-title">어디가<br>불편하세요?</h1>
 
+      <section class="curation-section" id="popularSection" style="display:none;">
+        <div class="curation-head">
+          <div>
+            <div class="curation-label">DOCTOR'S PICK</div>
+            <div class="curation-title">추천 건강 정보</div>
+          </div>
+        </div>
+        <div id="popularList"></div>
+      </section>
+
       <section class="article-section">
         <div class="section-title">최신 건강 정보</div>
 
@@ -180,7 +260,7 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.0.2</div>
+    <div class="app-version">닥터스위키 · v1.0.3</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
@@ -339,6 +419,7 @@ async function loadArticles(){
 
   allArticles=data || [];
   renderCategoryTabs();
+  renderPopularArticles();
   renderArticles();
 }
 
@@ -384,6 +465,36 @@ function renderArticles(){
   `).join("");
 
   document.querySelectorAll(".article-card").forEach(card=>{
+    card.addEventListener("click",()=>showArticle(card.dataset.slug));
+  });
+}
+
+function renderPopularArticles(){
+  const popularSection=$("popularSection");
+  const popularList=$("popularList");
+
+  const popular=[...allArticles]
+    .filter(article=>(article.view_count || 0)>0)
+    .sort((a,b)=>(b.view_count || 0)-(a.view_count || 0))
+    .slice(0,3);
+
+  if(popular.length===0){
+    popularSection.style.display="none";
+    return;
+  }
+
+  popularSection.style.display="block";
+
+  popularList.innerHTML=popular.map((article,index)=>`
+    <button class="pick-card" type="button" data-slug="${safe(article.slug)}">
+      ${index===0 ? `<div class="pick-badge">오늘의 추천</div>` : ""}
+      <div class="pick-category">${safe(article.category || "의료정보")}</div>
+      <div class="pick-title">${safe(article.title)}</div>
+      <div class="pick-summary">${safe(article.summary || "")}</div>
+    </button>
+  `).join("");
+
+  popularList.querySelectorAll(".pick-card").forEach(card=>{
     card.addEventListener("click",()=>showArticle(card.dataset.slug));
   });
 }
