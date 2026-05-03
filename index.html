@@ -399,6 +399,11 @@ function showArticle(slug){
     <div class="topic-title">${safe(article.title)}</div>
 
     <div class="summary card">
+    ${article.video_short ? `
+  <div class="video-box">
+    <iframe src="https://www.youtube.com/embed/${article.video_short}" allowfullscreen></iframe>
+  </div>
+` : ""}
       ${safe(article.summary || "닥터스위키 건강 정보입니다.")}
     </div>
 
