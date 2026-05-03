@@ -180,7 +180,7 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.0.1</div>
+    <div class="app-version">닥터스위키 · v1.0.2</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
@@ -328,6 +328,7 @@ async function loadArticles(){
     .from("articles")
     .select("*")
     .eq("status","published")
+    .order("sort_order",{ascending:true})
     .order("created_at",{ascending:false});
 
   if(error){
@@ -399,17 +400,60 @@ function showArticle(slug){
     <div class="topic-title">${safe(article.title)}</div>
 
     <div class="summary card">
-    ${article.video_short ? `
-  <div class="video-box">
-    <iframe src="https://www.youtube.com/embed/${article.video_short}" allowfullscreen></iframe>
-  </div>
-` : ""}
       ${safe(article.summary || "닥터스위키 건강 정보입니다.")}
     </div>
+
+    ${article.video_short ? `
+      <div class="video-box">
+        <iframe src="https://www.youtube.com/embed/${safe(article.video_short)}" allowfullscreen></iframe>
+      </div>
+    ` : ""}
 
     <div class="card article-detail-body">
       ${safe(article.content || "")}
     </div>
+
+    ${article.cta_text ? `
+      <button class="cta-main" type="button" data-url="${safe(article.clinic_link || "")}" data-click-type="clinic" data-click-key="${safe(article.slug)}">
+        🏥 ${safe(article.cta_text)}
+      </button>
+    ` : ""}
+
+    ${article.product_1_name ? `
+      <div class="product-box card">
+        <div class="box-title">🛒 추천 상품</div>
+
+        <button class="product-item" type="button" data-url="${safe(article.product_1_link || "")}" data-click-type="product_1" data-click-key="${safe(article.slug)}">
+          ${safe(article.product_1_name)}
+        </button>
+
+        ${article.product_2_name ? `
+          <button class="product-item" type="button" data-url="${safe(article.product_2_link || "")}" data-click-type="product_2" data-click-key="${safe(article.slug)}">
+            ${safe(article.product_2_name)}
+          </button>
+        ` : ""}
+
+        <div class="partner-note">파트너스 활동을 통해 일정 수수료를 받을 수 있습니다.</div>
+      </div>
+    ` : ""}
+
+    ${article.video_mid_1 ? `
+      <div class="mid-section">
+        <div class="mid-item">
+          <div class="video-box mid">
+            <iframe src="https://www.youtube.com/embed/${safe(article.video_mid_1)}" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        ${article.video_mid_2 ? `
+          <div class="mid-item">
+            <div class="video-box mid">
+              <iframe src="https://www.youtube.com/embed/${safe(article.video_mid_2)}" allowfullscreen></iframe>
+            </div>
+          </div>
+        ` : ""}
+      </div>
+    ` : ""}
 
     <div class="ad-box">
       📢 관련 건강 정보<br>
@@ -420,6 +464,13 @@ function showArticle(slug){
       <button class="gray" type="button" id="backHomeBtn">처음으로 돌아가기</button>
     </div>
   `;
+
+  document.querySelectorAll("[data-url]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      saveClick(btn.dataset.clickType,btn.dataset.clickKey);
+      moveTo(btn.dataset.url);
+    });
+  });
 
   $("backHomeBtn").addEventListener("click",goHome);
   saveClick("article",slug);
@@ -534,6 +585,21 @@ $("articleSearch").addEventListener("input",renderArticles);
 
 renderMenu();
 loadArticles();
+
+supabase
+  .channel("articles-realtime")
+  .on(
+    "postgres_changes",
+    {
+      event:"*",
+      schema:"public",
+      table:"articles"
+    },
+    ()=>{
+      loadArticles();
+    }
+  )
+  .subscribe();
 </script>
 </body>
 </html>
