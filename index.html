@@ -9,14 +9,56 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;width:100%;min-height:100%;background:#eef5fb;color:#111827}
 body{font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif}
-button{font-family:inherit;border:0;cursor:pointer}
+button,input{font-family:inherit}
+button{border:0;cursor:pointer}
 a{color:inherit;text-decoration:none}
 
 .app{max-width:480px;min-height:100vh;margin:0 auto;background:#fff}
 .header{padding:30px 24px 8px}
 .logo{font-size:32px;font-weight:900;color:#1677ff;letter-spacing:-.07em}
 .main{padding:24px}
-.home-title{margin:10px 0 24px;font-size:36px;line-height:1.2;font-weight:900;letter-spacing:-.07em}
+.home-title{margin:10px 0 18px;font-size:36px;line-height:1.2;font-weight:900;letter-spacing:-.07em}
+
+.search-box{margin-bottom:14px}
+.search-input{
+  width:100%;
+  height:54px;
+  padding:0 16px;
+  border:1px solid #d8e8ff;
+  border-radius:18px;
+  background:#f8fbff;
+  font-size:16px;
+  font-weight:800;
+  outline:none;
+}
+.category-tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:18px;padding-bottom:2px}
+.category-tab{
+  flex:0 0 auto;
+  padding:10px 14px;
+  border-radius:999px;
+  background:#eef2f7;
+  color:#344054;
+  font-size:14px;
+  font-weight:900;
+}
+.category-tab.active{background:#1677ff;color:#fff}
+
+.article-section{margin-bottom:26px}
+.section-title{font-size:20px;font-weight:900;margin:0 0 12px}
+.article-card{
+  width:100%;
+  display:block;
+  padding:16px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid #e5edf5;
+  margin-bottom:10px;
+  text-align:left;
+}
+.article-category{font-size:12px;color:#1677ff;font-weight:900;margin-bottom:6px}
+.article-title{font-size:19px;font-weight:900;line-height:1.35;margin-bottom:6px}
+.article-summary{font-size:14px;line-height:1.45;color:#667085}
+.empty-text{padding:16px;border-radius:16px;background:#f8fafc;color:#667085;font-size:14px;line-height:1.45}
 
 .menu{display:grid;gap:14px}
 .menu-btn,.primary,.gray,.cta-main,.related-btn,.product-item{
@@ -40,7 +82,7 @@ a{color:inherit;text-decoration:none}
 .menu-btn:nth-child(3){animation-delay:.13s}
 .menu-btn:nth-child(4){animation-delay:.18s}
 .menu-btn:nth-child(5){animation-delay:.23s}
-.menu-btn:active,.primary:active,.gray:active,.cta-main:active,.related-btn:active,.product-item:active{
+.menu-btn:active,.primary:active,.gray:active,.cta-main:active,.related-btn:active,.product-item:active,.article-card:active,.category-tab:active{
   transform:scale(.96);
   filter:brightness(.97);
 }
@@ -53,16 +95,22 @@ a{color:inherit;text-decoration:none}
 .card{padding:18px;border-radius:22px;background:#f8fafc;border:1px solid #e5edf5}
 .summary{margin-bottom:18px;font-size:19px;line-height:1.55;color:#344054}
 
+.article-detail-body{
+  font-size:18px;
+  line-height:1.7;
+  color:#263445;
+  white-space:pre-line;
+}
+.article-meta{margin-bottom:12px;font-size:13px;font-weight:900;color:#1677ff}
+
 .video-box{width:100%;aspect-ratio:9/16;background:#111827;border-radius:24px;overflow:hidden}
 .video-box.mid{aspect-ratio:16/9}
 .video-box iframe{width:100%;height:100%;border:0}
-
 .video-title{margin:16px 0 10px;font-size:25px;font-weight:900;line-height:1.35;letter-spacing:-.04em}
 .check-box{margin-top:12px;font-size:18px;line-height:1.55;color:#263445}
 .check-box b{color:#1677ff}
 
 .cta-main{min-height:66px;margin-top:18px;background:#12b76a;color:#fff;font-size:21px}
-
 .product-box{margin:18px 0}
 .box-title{font-size:20px;font-weight:900;margin-bottom:12px}
 .product-item{
@@ -77,7 +125,6 @@ a{color:inherit;text-decoration:none}
   text-align:left;
 }
 .partner-note{margin-top:6px;font-size:12px;line-height:1.45;color:#667085}
-
 .ad-box{
   margin:18px 0;
   padding:18px;
@@ -88,20 +135,16 @@ a{color:inherit;text-decoration:none}
   line-height:1.5;
   text-align:center;
 }
-
 .mid-section{margin-top:20px;padding-top:18px;border-top:1px solid #e5edf5}
 .mid-item{margin-bottom:20px}
 .mid-item:last-child{margin-bottom:0}
-
 .related{margin-top:18px}
 .related-list{display:grid;gap:10px}
 .related-btn{min-height:56px;background:#eef2f7;font-size:18px;color:#263445}
-
 .actions{display:grid;gap:12px;margin-top:18px}
 .primary,.gray{min-height:66px;font-size:21px}
 .primary{background:#1677ff;color:#fff}
 .gray{background:#eef2f7;color:#263445}
-
 .footer{padding:18px 24px 32px;font-size:12px;line-height:1.5;color:#98a2b3}
 .app-version{margin-bottom:6px;font-weight:900;color:#1677ff}
 </style>
@@ -116,6 +159,18 @@ a{color:inherit;text-decoration:none}
   <main class="main">
     <section id="home">
       <h1 class="home-title">어디가<br>불편하세요?</h1>
+
+      <section class="article-section">
+        <div class="section-title">최신 건강 정보</div>
+
+        <div class="search-box">
+          <input id="articleSearch" class="search-input" type="search" placeholder="궁금한 증상을 검색해보세요">
+        </div>
+
+        <div class="category-tabs" id="categoryTabs"></div>
+        <div id="articleList" class="article-list"></div>
+      </section>
+
       <div class="menu" id="menu"></div>
     </section>
 
@@ -125,12 +180,19 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.0.0</div>
+    <div class="app-version">닥터스위키 · v1.0.1</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
 
-<script>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient(
+  "https://rulsdjtrofwfpedtaaap.supabase.co",
+  "sb_publishable_qzSAcaIpz2Sq-xo_NxA23g_D_xlCdxW"
+);
+
 const MENUS=[
   {key:"gum",name:"잇몸에서 피가 나요",sub:"잇몸 · 치주 · 치과"},
   {key:"back",name:"허리가 아파요",sub:"허리 · 자세 · 정형외과"},
@@ -150,10 +212,7 @@ const CONTENTS={
     ],
     cta:"상담 가능한 치과 보기",
     clinicLink:"CLINIC_LINK_GUM",
-    products:[
-      ["부드러운 칫솔 보기","COUPANG_LINK_GUM_1"],
-      ["잇몸 케어 치약 보기","COUPANG_LINK_GUM_2"]
-    ],
+    products:[["부드러운 칫솔 보기","COUPANG_LINK_GUM_1"],["잇몸 케어 치약 보기","COUPANG_LINK_GUM_2"]],
     related:["stomach","eye"]
   },
   back:{
@@ -166,10 +225,7 @@ const CONTENTS={
     ],
     cta:"정형외과 정보 보기",
     clinicLink:"CLINIC_LINK_BACK",
-    products:[
-      ["허리 쿠션 보기","COUPANG_LINK_BACK_1"],
-      ["자세 보조용품 보기","COUPANG_LINK_BACK_2"]
-    ],
+    products:[["허리 쿠션 보기","COUPANG_LINK_BACK_1"],["자세 보조용품 보기","COUPANG_LINK_BACK_2"]],
     related:["sleep","eye"]
   },
   eye:{
@@ -182,10 +238,7 @@ const CONTENTS={
     ],
     cta:"안과 정보 보기",
     clinicLink:"CLINIC_LINK_EYE",
-    products:[
-      ["눈 온열 마스크 보기","COUPANG_LINK_EYE_1"],
-      ["블루라이트 차단 안경 보기","COUPANG_LINK_EYE_2"]
-    ],
+    products:[["눈 온열 마스크 보기","COUPANG_LINK_EYE_1"],["블루라이트 차단 안경 보기","COUPANG_LINK_EYE_2"]],
     related:["sleep","back"]
   },
   sleep:{
@@ -198,10 +251,7 @@ const CONTENTS={
     ],
     cta:"수면 상담 알아보기",
     clinicLink:"CLINIC_LINK_SLEEP",
-    products:[
-      ["수면 안대 보기","COUPANG_LINK_SLEEP_1"],
-      ["숙면 베개 보기","COUPANG_LINK_SLEEP_2"]
-    ],
+    products:[["수면 안대 보기","COUPANG_LINK_SLEEP_1"],["숙면 베개 보기","COUPANG_LINK_SLEEP_2"]],
     related:["eye","stomach"]
   },
   stomach:{
@@ -214,13 +264,13 @@ const CONTENTS={
     ],
     cta:"내과 정보 보기",
     clinicLink:"CLINIC_LINK_STOMACH",
-    products:[
-      ["따뜻한 찜질팩 보기","COUPANG_LINK_STOMACH_1"],
-      ["소화 관리용품 보기","COUPANG_LINK_STOMACH_2"]
-    ],
+    products:[["따뜻한 찜질팩 보기","COUPANG_LINK_STOMACH_1"],["소화 관리용품 보기","COUPANG_LINK_STOMACH_2"]],
     related:["sleep","gum"]
   }
 };
+
+let allArticles=[];
+let selectedCategory="전체";
 
 const $=id=>document.getElementById(id);
 
@@ -236,7 +286,7 @@ function safe(v){
 function videoBlock(id,isMid=false){
   return `
     <div class="video-box ${isMid ? "mid" : ""}">
-      <iframe src="https://www.youtube.com/embed/${safe(id)}"></iframe>
+      <iframe src="https://www.youtube.com/embed/${safe(id)}" allowfullscreen></iframe>
     </div>
   `;
 }
@@ -270,6 +320,107 @@ function renderMenu(){
   });
 }
 
+async function loadArticles(){
+  const list=$("articleList");
+  list.innerHTML=`<div class="empty-text">건강 정보를 불러오는 중입니다.</div>`;
+
+  const {data,error}=await supabase
+    .from("articles")
+    .select("*")
+    .eq("status","published")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    console.error(error);
+    list.innerHTML=`<div class="empty-text">글을 불러오지 못했습니다. Supabase 설정을 확인해주세요.</div>`;
+    return;
+  }
+
+  allArticles=data || [];
+  renderCategoryTabs();
+  renderArticles();
+}
+
+function renderCategoryTabs(){
+  const categories=["전체",...new Set(allArticles.map(a=>a.category).filter(Boolean))];
+
+  $("categoryTabs").innerHTML=categories.map(cat=>`
+    <button class="category-tab ${cat===selectedCategory ? "active" : ""}" type="button" data-category="${safe(cat)}">
+      ${safe(cat)}
+    </button>
+  `).join("");
+
+  document.querySelectorAll(".category-tab").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      selectedCategory=btn.dataset.category;
+      renderCategoryTabs();
+      renderArticles();
+    });
+  });
+}
+
+function renderArticles(){
+  const keyword=($("articleSearch").value || "").trim().toLowerCase();
+
+  const filtered=allArticles.filter(article=>{
+    const categoryOk=selectedCategory==="전체" || article.category===selectedCategory;
+    const text=`${article.title || ""} ${article.summary || ""} ${article.content || ""}`.toLowerCase();
+    const keywordOk=!keyword || text.includes(keyword);
+    return categoryOk && keywordOk;
+  });
+
+  if(filtered.length===0){
+    $("articleList").innerHTML=`<div class="empty-text">조건에 맞는 글이 없습니다.</div>`;
+    return;
+  }
+
+  $("articleList").innerHTML=filtered.map(article=>`
+    <button class="article-card" type="button" data-slug="${safe(article.slug)}">
+      <div class="article-category">${safe(article.category || "의료정보")}</div>
+      <div class="article-title">${safe(article.title)}</div>
+      <div class="article-summary">${safe(article.summary || "")}</div>
+    </button>
+  `).join("");
+
+  document.querySelectorAll(".article-card").forEach(card=>{
+    card.addEventListener("click",()=>showArticle(card.dataset.slug));
+  });
+}
+
+function showArticle(slug){
+  const article=allArticles.find(a=>a.slug===slug);
+  if(!article) return;
+
+  $("home").style.display="none";
+  $("result").style.display="block";
+
+  $("resultArea").innerHTML=`
+    <div class="article-meta">${safe(article.category || "의료정보")}</div>
+    <div class="topic-title">${safe(article.title)}</div>
+
+    <div class="summary card">
+      ${safe(article.summary || "닥터스위키 건강 정보입니다.")}
+    </div>
+
+    <div class="card article-detail-body">
+      ${safe(article.content || "")}
+    </div>
+
+    <div class="ad-box">
+      📢 관련 건강 정보<br>
+      AdSense 광고 삽입 위치
+    </div>
+
+    <div class="actions">
+      <button class="gray" type="button" id="backHomeBtn">처음으로 돌아가기</button>
+    </div>
+  `;
+
+  $("backHomeBtn").addEventListener("click",goHome);
+  saveClick("article",slug);
+  scrollTop();
+}
+
 function showResult(key){
   const d=CONTENTS[key];
   if(!d) return;
@@ -281,7 +432,6 @@ function showResult(key){
 
   $("resultArea").innerHTML=`
     <div class="topic-title">${safe(d.title)}</div>
-
     <div class="summary card">${safe(d.summary)}</div>
 
     ${videoBlock(d.short.id)}
@@ -335,7 +485,6 @@ function showResult(key){
     </div>
 
     <div class="actions">
-      <button class="primary" type="button" data-key="${safe(key)}">다른 건강 정보 보기</button>
       <button class="gray" type="button">처음으로 돌아가기</button>
     </div>
   `;
@@ -359,10 +508,7 @@ function showResult(key){
     btn.addEventListener("click",()=>showResult(btn.dataset.key));
   });
 
-  const primary=document.querySelector(".primary");
   const gray=document.querySelector(".gray");
-
-  if(primary) primary.addEventListener("click",e=>showResult(e.currentTarget.dataset.key));
   if(gray) gray.addEventListener("click",goHome);
 
   saveClick("view",key);
@@ -379,7 +525,10 @@ function scrollTop(){
   setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),0);
 }
 
+$("articleSearch").addEventListener("input",renderArticles);
+
 renderMenu();
+loadArticles();
 </script>
 </body>
 </html>
