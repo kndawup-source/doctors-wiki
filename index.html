@@ -78,6 +78,10 @@ a{color:inherit;text-decoration:none}
 .box-title{font-size:20px;font-weight:900;margin-bottom:12px}
 .product-item{width:100%;display:block;padding:15px 16px;border-radius:16px;background:#fff;border:1px solid #e5edf5;margin-bottom:10px;font-size:18px;font-weight:900;text-align:left}
 .partner-note{margin-top:6px;font-size:12px;line-height:1.45;color:#667085}
+
+.related-article-box{margin-top:4px}
+.related-article-box .article-card{margin-bottom:10px}
+
 .ad-box{margin:18px 0;padding:18px;border-radius:20px;background:#fff8e6;color:#6b4f00;font-size:17px;line-height:1.5;text-align:center}
 .mid-section{margin-top:22px;padding-top:20px;border-top:1px solid #e5edf5}
 .mid-item{margin-bottom:20px}
@@ -125,7 +129,7 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.1.0</div>
+    <div class="app-version">닥터스위키 · v1.1.3</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
@@ -355,9 +359,33 @@ function renderArticles(){
     </button>
   `).join("");
 
-  document.querySelectorAll(".article-card").forEach(card=>{
+  document.querySelectorAll("#articleList .article-card").forEach(card=>{
     card.addEventListener("click",()=>showArticle(card.dataset.slug));
   });
+}
+
+function getTwoRandomDifferentCategoryArticles(currentSlug,currentCategory){
+  const categoryMap={};
+  const current=normalizeCategory(currentCategory);
+
+  allArticles
+    .filter(article=>article.slug!==currentSlug)
+    .filter(article=>normalizeCategory(article.category)!==current)
+    .forEach(article=>{
+      const category=normalizeCategory(article.category);
+      if(!categoryMap[category]) categoryMap[category]=[];
+      categoryMap[category].push(article);
+    });
+
+  const categories=Object.keys(categoryMap);
+  if(categories.length===0) return [];
+
+  const shuffled=[...categories].sort(()=>Math.random()-0.5).slice(0,2);
+
+  return shuffled.map(category=>{
+    const list=categoryMap[category];
+    return list[Math.floor(Math.random()*list.length)];
+  }).filter(Boolean);
 }
 
 async function increaseViewCount(article){
@@ -377,6 +405,8 @@ async function increaseViewCount(article){
 function showArticle(slug,changeUrl=true){
   const article=allArticles.find(a=>a.slug===slug);
   if(!article) return;
+
+  const relatedArticles=getTwoRandomDifferentCategoryArticles(article.slug,article.category);
 
   $("home").style.display="none";
   $("result").style.display="block";
@@ -463,7 +493,26 @@ function showArticle(slug,changeUrl=true){
 
     <div class="actions">
       <button class="primary" type="button" id="copyBottomBtn">🔗 링크 복사</button>
-      <button class="gray" type="button" id="backPageBtn">이전 페이지로 돌아가기</button>
+
+      ${relatedArticles.length>0 ? `
+        <div class="related-article-box">
+          <div class="box-title">다른 건강 정보도 확인해보세요</div>
+          ${relatedArticles.map(item=>`
+            <button
+              class="article-card related-card"
+              type="button"
+              data-slug="${safe(item.slug)}"
+              style="${categoryStyle(item.category)}"
+            >
+              <div class="article-category">${safe(item.category || "의료정보")}</div>
+              <div class="article-title">${safe(item.title)}</div>
+              <div class="article-summary">${safe(item.summary || "")}</div>
+            </button>
+          `).join("")}
+        </div>
+      ` : ""}
+
+      <button class="gray" type="button" id="homeBtn">홈으로 가기</button>
     </div>
   `;
 
@@ -474,25 +523,21 @@ function showArticle(slug,changeUrl=true){
     });
   });
 
+  document.querySelectorAll(".related-card").forEach(card=>{
+    card.addEventListener("click",()=>showArticle(card.dataset.slug));
+  });
+
   const copyTopBtn=$("copyTopBtn");
   const copyBottomBtn=$("copyBottomBtn");
+  const homeBtn=$("homeBtn");
 
   if(copyTopBtn) copyTopBtn.addEventListener("click",()=>copyCurrentLink(copyTopBtn));
   if(copyBottomBtn) copyBottomBtn.addEventListener("click",()=>copyCurrentLink(copyBottomBtn));
-
-  $("backPageBtn").addEventListener("click",goBackSafe);
+  if(homeBtn) homeBtn.addEventListener("click",goHome);
 
   saveClick("article",slug);
   increaseViewCount(article);
   scrollTop();
-}
-
-function goBackSafe(){
-  if(history.length > 1){
-    history.back();
-  }else{
-    goHome();
-  }
 }
 
 function goHome(){
