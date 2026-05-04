@@ -164,7 +164,7 @@ a{color:inherit;text-decoration:none}
   font-size:22px;font-weight:900;margin:0 0 14px;letter-spacing:-.04em;
 }
 .article-card{
-  width:100%;display:block;padding:17px;
+  width:100%;display:block;padding:18px;
   border-radius:14px;background:#fff;border:1px solid #e5e8eb;
   margin-bottom:10px;text-align:left;transition:.12s ease;
 }
@@ -215,6 +215,10 @@ a{color:inherit;text-decoration:none}
   margin-bottom:12px;font-size:14px;font-weight:900;color:#1677ff;
 }
 
+.inline-share{
+  margin:14px 0 20px;
+}
+
 .related-section{
   margin:24px 0 18px;padding:20px 16px;border-radius:18px;
   background:#f5f7fa;border:1px solid #e5e8eb;
@@ -224,6 +228,21 @@ a{color:inherit;text-decoration:none}
 }
 .related-section .article-card{background:#fff;margin-bottom:10px}
 .related-section .article-card:last-child{margin-bottom:0}
+
+.cta-box{
+  margin-top:24px;
+}
+.cta-guide{
+  margin:0 0 10px;
+  padding:16px;
+  border-radius:16px;
+  background:#f0fdf4;
+  color:#166534;
+  font-size:17px;
+  line-height:1.55;
+  font-weight:900;
+  text-align:center;
+}
 
 .video-box{
   width:100%;aspect-ratio:9/16;background:#111827;
@@ -247,7 +266,7 @@ a{color:inherit;text-decoration:none}
 }
 .primary{background:#1677ff;color:#fff}
 .gray{background:#eef2f7;color:#263445}
-.cta-main{margin-top:24px;background:#12b76a;color:#fff}
+.cta-main{background:#12b76a;color:#fff}
 
 .actions{display:grid;gap:12px;margin-top:18px}
 
@@ -318,7 +337,7 @@ a{color:inherit;text-decoration:none}
         <div id="articleSearchWrap" class="article-search-wrap">
           <div class="search-row">
             <div class="search-box">
-              <input id="articleSearch" class="search-input" type="search" placeholder="증상이나 진료과를 검색해보세요">
+              <input id="articleSearch" class="search-input" type="search" placeholder="예) 치통, 무릎통증, 눈이 침침할 때">
             </div>
             <button id="searchCancelBtn" class="search-cancel" type="button">취소</button>
           </div>
@@ -340,7 +359,7 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.2.5</div>
+    <div class="app-version">닥터스위키 · v1.2.6</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
@@ -471,7 +490,7 @@ function showIntro(){
 }
 
 async function loadArticles(){
-  $("articleList").innerHTML=`<div class="empty-text">건강 정보를 불러오는 중입니다.</div>`;
+  $("articleList").innerHTML=`<div class="empty-text">건강 정보를 준비하고 있어요.</div>`;
 
   const {data,error}=await supabase
     .from("articles")
@@ -563,7 +582,7 @@ function renderPopularArticles(){
         ? `
           <div class="hero-label">🔥 지금 가장 많이 보는 글</div>
           <div class="pick-title">${safe(article.title)}</div>
-          <div class="hero-desc">${safe(article.summary || "지금 확인하면 도움이 되는 건강 정보입니다.")}</div>
+          <div class="hero-desc">3분만에 확인해보세요. ${safe(article.summary || "지금 확인하면 도움이 되는 건강 정보입니다.")}</div>
           <div class="hero-cta">
             <span>지금 바로 확인하기</span>
             <span>→</span>
@@ -715,9 +734,13 @@ function showArticle(slug,changeUrl=true){
       ${formatContent(article.content || "")}
     </div>
 
+    <div class="inline-share">
+      <button class="primary" type="button" id="copyInlineBtn">📤 이 정보 공유하기</button>
+    </div>
+
     ${relatedArticles.length>0 ? `
       <div class="related-section">
-        <div class="related-section-title">이런 증상도 같이 확인해보세요</div>
+        <div class="related-section-title">이 증상, 같이 오는 경우 많아요</div>
 
         ${relatedArticles.map(item=>`
           <button
@@ -735,9 +758,12 @@ function showArticle(slug,changeUrl=true){
     ` : ""}
 
     ${article.cta_text ? `
-      <button class="cta-main" type="button" data-url="${safe(article.clinic_link || "")}" data-click-type="clinic" data-click-key="${safe(article.slug)}">
-        🏥 ${safe(article.cta_text)}
-      </button>
+      <div class="cta-box">
+        <div class="cta-guide">이런 증상이 계속된다면<br>의료진 상담을 받아보세요.</div>
+        <button class="cta-main" type="button" data-url="${safe(article.clinic_link || "")}" data-click-type="clinic" data-click-key="${safe(article.slug)}">
+          🏥 ${safe(article.cta_text)}
+        </button>
+      </div>
     ` : ""}
 
     ${article.product_1_name ? `
@@ -786,7 +812,6 @@ function showArticle(slug,changeUrl=true){
     </div>
 
     <div class="actions">
-      <button class="primary" type="button" id="copyBottomBtn">📤 가족에게 공유하기</button>
       <button class="gray" type="button" id="homeBtn">처음 화면으로</button>
     </div>
   `;
@@ -802,10 +827,10 @@ function showArticle(slug,changeUrl=true){
     card.addEventListener("click",()=>showArticle(card.dataset.slug));
   });
 
-  const copyBottomBtn=$("copyBottomBtn");
+  const copyInlineBtn=$("copyInlineBtn");
   const homeBtn=$("homeBtn");
 
-  if(copyBottomBtn) copyBottomBtn.addEventListener("click",()=>copyCurrentLink(copyBottomBtn));
+  if(copyInlineBtn) copyInlineBtn.addEventListener("click",()=>copyCurrentLink(copyInlineBtn));
   if(homeBtn) homeBtn.addEventListener("click",goHome);
 
   saveClick("article",slug);
