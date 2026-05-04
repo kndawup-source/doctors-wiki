@@ -734,7 +734,10 @@ async function increaseHelpfulCount(article,btn){
 
   const key="doctorwiki_help_"+article.id;
 
-  if(localStorage.getItem(key)) return;
+  if(localStorage.getItem(key)){
+  alert("이미 참여하셨어요 👍");
+  return;
+}
 
   btn.disabled=true;
 
