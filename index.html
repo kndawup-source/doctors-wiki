@@ -283,10 +283,6 @@ function showIntro(){
   const intro=$("intro");
   if(!intro) return;
 
-  if(localStorage.getItem("doctorwiki_intro_seen")){
-    intro.style.display="none";
-    return;
-  }
 
   setTimeout(()=>{
     intro.classList.add("intro-hide");
