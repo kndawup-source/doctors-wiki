@@ -729,7 +729,7 @@ async function increaseViewCount(article){
   }
 }
 
-async function increaseHelpfulCount(article,btn){
+  if(localStorage.getItem(key)) return;
   if(!article || !article.id || !btn) return;
 
   const key="doctorwiki_help_"+article.id;
