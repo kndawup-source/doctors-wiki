@@ -35,19 +35,19 @@ a{color:inherit;text-decoration:none}
 }
 
 .app{max-width:480px;min-height:100vh;margin:0 auto;background:#fff}
-.header{padding:28px 24px 8px;background:#fff}
-.logo{font-size:31px;font-weight:900;color:#1677ff;letter-spacing:-.07em}
-.main{padding:22px 22px 24px}
+.header{padding:12px 24px 4px;background:#fff}
+.main{padding:18px 22px 24px}
 
 .home-title{
-  margin:10px 0 18px;
-  font-size:34px;line-height:1.3;font-weight:900;letter-spacing:-.07em;
+  margin:10px 0 22px;
+  font-size:36px;
+  line-height:1.28;
+  font-weight:900;
+  letter-spacing:-.05em;
+  color:#111827;
 }
 
-.article-search-wrap{
-  margin-bottom:12px;
-  background:#fff;
-}
+.article-search-wrap{margin-bottom:12px;background:#fff}
 .article-search-wrap.searching{
   position:sticky;
   top:0;
@@ -56,12 +56,7 @@ a{color:inherit;text-decoration:none}
   margin:0 -22px 14px;
   border-bottom:1px solid #e5e8eb;
 }
-
-.search-row{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
+.search-row{display:flex;align-items:center;gap:8px}
 .search-box{flex:1}
 .search-input{
   width:100%;height:60px;padding:0 18px;
@@ -70,39 +65,23 @@ a{color:inherit;text-decoration:none}
 }
 .search-input::placeholder{color:#8a94a6}
 .search-cancel{
-  display:none;
-  flex:0 0 auto;
-  min-height:48px;
-  padding:0 6px;
-  background:transparent;
-  color:#1677ff;
-  font-size:16px;
-  font-weight:900;
+  display:none;flex:0 0 auto;min-height:48px;padding:0 6px;
+  background:transparent;color:#1677ff;font-size:16px;font-weight:900;
 }
 .article-search-wrap.searching .search-cancel{display:block}
 
 .article-guide{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  min-height:42px;
-  padding:0 14px;
-  margin:0 0 14px;
-  border:1px solid #edf0f3;
-  border-radius:14px;
+  display:flex;justify-content:space-between;align-items:center;
+  min-height:42px;padding:0 14px;margin:0 0 14px;
+  border:1px solid #edf0f3;border-radius:14px;
   background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
   box-shadow:0 4px 12px rgba(17,24,39,.03);
 }
 .article-guide .left{
-  font-size:14px;
-  font-weight:900;
-  color:#111827;
-  letter-spacing:-.03em;
+  font-size:14px;font-weight:900;color:#111827;letter-spacing:-.03em;
 }
 .article-guide .right{
-  font-size:12px;
-  font-weight:900;
-  color:#8a94a6;
+  font-size:12px;font-weight:900;color:#8a94a6;
 }
 
 .category-tabs{
@@ -119,10 +98,13 @@ a{color:inherit;text-decoration:none}
 .category-tab.active{background:#1677ff;color:#fff}
 
 .curation-section{
-  margin:4px 0 28px;padding:18px;
-  border-radius:18px;background:#f8fafc;border:1px solid #e5e8eb;
+  margin:4px 0 30px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  border:0;
 }
-.curation-head{margin-bottom:14px}
+.curation-head{margin-bottom:12px}
 .curation-label{
   font-size:11px;font-weight:900;color:#1677ff;letter-spacing:.12em;
 }
@@ -136,12 +118,12 @@ a{color:inherit;text-decoration:none}
   text-align:left;margin-bottom:10px;transition:.12s ease;
 }
 .pick-card.hero{
-  padding:24px;
-  margin-bottom:16px;
-  border-radius:18px;
+  padding:26px;
+  margin-bottom:14px;
+  border-radius:22px;
   border:1px solid #d8e8ff;
   background:linear-gradient(180deg,var(--soft,#f5f9ff) 0%,#fff 100%);
-  box-shadow:0 8px 18px rgba(22,119,255,.08);
+  box-shadow:0 10px 28px rgba(22,119,255,.14);
 }
 .pick-card:not(.hero){opacity:.96}
 .pick-badge{
@@ -150,41 +132,28 @@ a{color:inherit;text-decoration:none}
   color:#fff;font-size:12px;font-weight:900;
 }
 .hero-label{
-  font-size:13px;
-  line-height:1.4;
-  font-weight:900;
-  color:#1677ff;
-  margin-bottom:10px;
+  font-size:13px;line-height:1.4;font-weight:900;
+  color:#1677ff;margin-bottom:10px;
 }
 .pick-title{
   font-size:21px;font-weight:900;line-height:1.38;
   letter-spacing:-.04em;margin-bottom:6px;
 }
 .pick-card.hero .pick-title{
-  font-size:26px;
-  line-height:1.32;
+  font-size:27px;
+  line-height:1.3;
   letter-spacing:-.06em;
   margin-bottom:10px;
 }
 .hero-desc{
-  font-size:15px;
-  line-height:1.55;
-  color:#475467;
-  font-weight:700;
-  margin-bottom:16px;
+  font-size:15px;line-height:1.55;color:#475467;
+  font-weight:700;margin-bottom:16px;
 }
 .hero-cta{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:100%;
-  min-height:48px;
-  padding:0 16px;
-  border-radius:14px;
-  background:#1677ff;
-  color:#fff;
-  font-size:16px;
-  font-weight:900;
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;min-height:50px;padding:0 16px;
+  border-radius:14px;background:#1677ff;color:#fff;
+  font-size:16px;font-weight:900;
 }
 .pick-summary,.article-summary{
   font-size:15px;line-height:1.55;color:#667085;
@@ -211,9 +180,7 @@ a{color:inherit;text-decoration:none}
   padding:18px;border-radius:16px;background:#f8fafc;
   color:#667085;font-size:15px;line-height:1.55;
 }
-#articleList{
-  min-height:610px;
-}
+#articleList{min-height:610px}
 
 .result{display:none}
 .topic-title{
@@ -249,22 +216,13 @@ a{color:inherit;text-decoration:none}
 }
 
 .related-section{
-  margin:24px 0 18px;
-  padding:20px 16px;
-  border-radius:18px;
-  background:#f5f7fa;
-  border:1px solid #e5e8eb;
+  margin:24px 0 18px;padding:20px 16px;border-radius:18px;
+  background:#f5f7fa;border:1px solid #e5e8eb;
 }
 .related-section-title{
-  margin-bottom:12px;
-  font-size:21px;
-  font-weight:900;
-  letter-spacing:-.04em;
+  margin-bottom:12px;font-size:21px;font-weight:900;letter-spacing:-.04em;
 }
-.related-section .article-card{
-  background:#fff;
-  margin-bottom:10px;
-}
+.related-section .article-card{background:#fff;margin-bottom:10px}
 .related-section .article-card:last-child{margin-bottom:0}
 
 .video-box{
@@ -303,11 +261,7 @@ a{color:inherit;text-decoration:none}
   font-size:18px;font-weight:900;text-align:left;
 }
 .partner-note{
-  margin-top:8px;
-  font-size:12px;
-  line-height:1.5;
-  color:#98a2b3;
-  text-align:center;
+  margin-top:8px;font-size:12px;line-height:1.5;color:#98a2b3;text-align:center;
 }
 
 .ad-box{
@@ -322,13 +276,7 @@ a{color:inherit;text-decoration:none}
 .mid-item{margin-bottom:20px}
 .mid-item:last-child{margin-bottom:0}
 
-.primary:active,
-.gray:active,
-.cta-main:active,
-.product-item:active,
-.article-card:active,
-.category-tab:active,
-.pick-card:active{
+.primary:active,.gray:active,.cta-main:active,.product-item:active,.article-card:active,.category-tab:active,.pick-card:active{
   transform:scale(.97);filter:brightness(.98);
 }
 
@@ -350,9 +298,7 @@ a{color:inherit;text-decoration:none}
 </div>
 
 <div class="app">
-  <header class="header">
-    <div class="logo">닥터스위키</div>
-  </header>
+  <header class="header"></header>
 
   <main class="main">
     <section id="home">
@@ -394,7 +340,7 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.2.4</div>
+    <div class="app-version">닥터스위키 · v1.2.5</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
@@ -596,7 +542,7 @@ function renderPopularArticles(){
   const picks=Object.values(categoryMap)
     .map(list=>list.sort((a,b)=>(b.view_count || 0)-(a.view_count || 0))[0])
     .sort((a,b)=>(b.view_count || 0)-(a.view_count || 0))
-    .slice(0,5);
+    .slice(0,3);
 
   if(picks.length===0){
     popularSection.style.display="none";
