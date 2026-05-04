@@ -8,19 +8,15 @@
 
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;min-height:100%;background:#eef5fb;color:#111827}
+html,body{margin:0;width:100%;min-height:100%;background:#f5f7fa;color:#111827}
 body{font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif}
 button,input{font-family:inherit}
 button{border:0;cursor:pointer}
 a{color:inherit;text-decoration:none}
 
 #intro{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  position:fixed;inset:0;z-index:9999;
+  display:flex;justify-content:center;align-items:center;
   background:linear-gradient(180deg,#1677ff 0%,#0f3fff 100%);
   color:#fff;
 }
@@ -28,12 +24,9 @@ a{color:inherit;text-decoration:none}
 .intro-logo{font-size:36px;font-weight:900;letter-spacing:-.07em}
 .intro-sub{margin-top:10px;font-size:15px;font-weight:800;opacity:.9}
 .intro-sponsor{
-  margin-top:22px;
-  padding:10px 14px;
-  border-radius:999px;
+  margin-top:22px;padding:10px 14px;border-radius:999px;
   background:rgba(255,255,255,.16);
-  font-size:12px;
-  font-weight:900;
+  font-size:12px;font-weight:900;
 }
 .intro-hide{animation:introFade .6s ease forwards}
 @keyframes introFade{
@@ -42,58 +35,166 @@ a{color:inherit;text-decoration:none}
 }
 
 .app{max-width:480px;min-height:100vh;margin:0 auto;background:#fff}
-.header{padding:30px 24px 8px}
-.logo{font-size:32px;font-weight:900;color:#1677ff;letter-spacing:-.07em}
-.main{padding:24px}
-.home-title{margin:10px 0 18px;font-size:36px;line-height:1.2;font-weight:900;letter-spacing:-.07em}
+.header{padding:28px 24px 8px;background:#fff}
+.logo{font-size:31px;font-weight:900;color:#1677ff;letter-spacing:-.07em}
+.main{padding:22px 22px 24px}
 
-.curation-section{margin:4px 0 28px;padding:18px;border-radius:26px;background:linear-gradient(180deg,#eef6ff 0%,#ffffff 100%);border:1px solid #d8e8ff}
-.curation-head{margin-bottom:14px}
-.curation-label{font-size:11px;font-weight:900;color:#1677ff;letter-spacing:.12em}
-.curation-title{margin-top:4px;font-size:24px;font-weight:900;letter-spacing:-.05em}
+.home-title{
+  margin:10px 0 18px;
+  font-size:34px;line-height:1.3;font-weight:900;letter-spacing:-.07em;
+}
 
-.pick-card{width:100%;display:block;padding:18px;border-radius:22px;background:#fff;border:1px solid #e5edf5;text-align:left;margin-bottom:10px;transition:.12s ease}
-.pick-card.hero{padding:24px;border:2px solid var(--accent,#1677ff);background:linear-gradient(180deg,var(--soft,#eef6ff) 0%,#fff 100%);box-shadow:0 14px 32px rgba(22,119,255,.14)}
-.pick-badge{display:inline-flex;margin-bottom:12px;padding:7px 11px;border-radius:999px;background:var(--accent,#1677ff);color:#fff;font-size:12px;font-weight:900}
-.pick-title{font-size:21px;font-weight:900;line-height:1.35;letter-spacing:-.04em;margin-bottom:6px}
-.pick-card.hero .pick-title{font-size:26px}
-.pick-summary,.article-summary{font-size:14px;line-height:1.45;color:#667085}
+.search-box{margin-bottom:16px}
+.search-input{
+  width:100%;height:60px;padding:0 18px;
+  border:1px solid #e5e8eb;border-radius:16px;background:#f5f7fa;
+  font-size:18px;font-weight:800;outline:none;color:#111827;
+}
+.search-input::placeholder{color:#8a94a6}
 
-.search-box{margin-bottom:14px}
-.search-input{width:100%;height:54px;padding:0 16px;border:1px solid #d8e8ff;border-radius:18px;background:#f8fbff;font-size:16px;font-weight:800;outline:none}
-.category-tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:18px;padding-bottom:2px}
-.category-tab{flex:0 0 auto;padding:10px 14px;border-radius:999px;background:#eef2f7;color:#344054;font-size:14px;font-weight:900}
+.category-tabs{
+  display:flex;gap:8px;overflow-x:auto;
+  margin-bottom:20px;padding-bottom:4px;
+}
+.category-tabs::-webkit-scrollbar{display:none}
+.category-tab{
+  flex:0 0 auto;min-height:44px;
+  padding:12px 16px;border-radius:999px;
+  background:#eef2f7;color:#344054;
+  font-size:15px;font-weight:900;
+}
 .category-tab.active{background:#1677ff;color:#fff}
 
+.curation-section{
+  margin:4px 0 28px;padding:18px;
+  border-radius:18px;background:#f8fafc;border:1px solid #e5e8eb;
+}
+.curation-head{margin-bottom:14px}
+.curation-label{
+  font-size:11px;font-weight:900;color:#1677ff;letter-spacing:.12em;
+}
+.curation-title{
+  margin-top:4px;font-size:23px;font-weight:900;letter-spacing:-.05em;
+}
+
+.pick-card{
+  width:100%;display:block;padding:18px;
+  border-radius:16px;background:#fff;border:1px solid #e5e8eb;
+  text-align:left;margin-bottom:10px;transition:.12s ease;
+}
+.pick-card.hero{
+  padding:22px;border:2px solid var(--accent,#1677ff);
+  background:linear-gradient(180deg,var(--soft,#f5f9ff) 0%,#fff 100%);
+  box-shadow:none;
+}
+.pick-badge{
+  display:inline-flex;margin-bottom:12px;padding:7px 11px;
+  border-radius:999px;background:var(--accent,#1677ff);
+  color:#fff;font-size:12px;font-weight:900;
+}
+.pick-title{
+  font-size:21px;font-weight:900;line-height:1.38;
+  letter-spacing:-.04em;margin-bottom:6px;
+}
+.pick-card.hero .pick-title{font-size:25px}
+.pick-summary,.article-summary{
+  font-size:15px;line-height:1.55;color:#667085;
+}
+
 .article-section{margin-bottom:26px}
-.section-title{font-size:20px;font-weight:900;margin:0 0 12px}
-.article-card{width:100%;display:block;padding:16px;border-radius:18px;background:#fff;border:1px solid #e5edf5;margin-bottom:10px;text-align:left;transition:.12s ease}
-.article-category{font-size:12px;color:var(--accent,#1677ff);font-weight:900;margin-bottom:6px}
-.article-title{font-size:19px;font-weight:900;line-height:1.35;margin-bottom:6px}
-.empty-text{padding:16px;border-radius:16px;background:#f8fafc;color:#667085;font-size:14px;line-height:1.45}
+.section-title{
+  font-size:22px;font-weight:900;margin:0 0 14px;letter-spacing:-.04em;
+}
+.article-card{
+  width:100%;display:block;padding:17px;
+  border-radius:14px;background:#fff;border:1px solid #e5e8eb;
+  margin-bottom:10px;text-align:left;transition:.12s ease;
+}
+.article-category{
+  font-size:13px;color:var(--accent,#1677ff);
+  font-weight:900;margin-bottom:7px;
+}
+.article-title{
+  font-size:20px;font-weight:900;line-height:1.4;
+  letter-spacing:-.04em;margin-bottom:6px;
+}
+.empty-text{
+  padding:18px;border-radius:16px;background:#f8fafc;
+  color:#667085;font-size:15px;line-height:1.55;
+}
 
 .result{display:none}
-.topic-title{margin:4px 0 14px;font-size:32px;font-weight:900;line-height:1.25;letter-spacing:-.06em}
-.card{padding:18px;border-radius:22px;background:#f8fafc;border:1px solid #e5edf5}
-.summary{margin-bottom:18px;font-size:19px;line-height:1.55;color:#344054}
-.article-detail-body{margin-top:18px;padding:20px;border-radius:22px;background:#fff;border:1px solid #e5edf5;font-size:18px;line-height:1.75;color:#263445}
-.content-heading{margin:26px 0 10px;font-size:22px;line-height:1.35;font-weight:900;letter-spacing:-.04em;color:#111827}
+.topic-title{
+  margin:4px 0 14px;
+  font-size:31px;font-weight:900;line-height:1.28;letter-spacing:-.06em;
+}
+.card{
+  padding:18px;border-radius:16px;background:#f8fafc;border:1px solid #e5e8eb;
+}
+.summary{
+  margin-bottom:18px;font-size:19px;line-height:1.65;color:#344054;
+}
+.article-detail-body{
+  margin-top:18px;padding:20px;border-radius:16px;background:#fff;
+  border:1px solid #e5e8eb;font-size:19px;line-height:1.8;color:#263445;
+}
+.content-heading{
+  margin:28px 0 10px;font-size:22px;line-height:1.4;
+  font-weight:900;letter-spacing:-.04em;color:#111827;
+}
 .content-heading:first-child{margin-top:0}
-.content-paragraph{margin:0 0 14px;font-size:18px;line-height:1.75;color:#263445}
-.notice-box{margin:18px 0;padding:16px;border-radius:18px;font-size:16px;line-height:1.55;font-weight:800}
+.content-paragraph{
+  margin:0 0 15px;font-size:19px;line-height:1.8;color:#263445;
+}
+.notice-box{
+  margin:18px 0;padding:16px;border-radius:14px;
+  font-size:17px;line-height:1.6;font-weight:800;
+}
 .notice-box.warning{background:#fff7ed;color:#9a3412}
 .notice-box.tip{background:#eef6ff;color:#175cd3}
-.article-meta{margin-bottom:12px;font-size:13px;font-weight:900;color:#1677ff}
+.article-meta{
+  margin-bottom:12px;font-size:14px;font-weight:900;color:#1677ff;
+}
 
-.video-box{width:100%;aspect-ratio:9/16;background:#111827;border-radius:24px;overflow:hidden;margin-bottom:18px}
+.related-section{
+  margin:24px 0 18px;
+  padding:20px 16px;
+  border-radius:18px;
+  background:#f5f7fa;
+  border:1px solid #e5e8eb;
+}
+.related-section-title{
+  margin-bottom:12px;
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+.related-section .article-card{
+  background:#fff;
+  margin-bottom:10px;
+}
+.related-section .article-card:last-child{margin-bottom:0}
+
+.video-box{
+  width:100%;aspect-ratio:9/16;background:#111827;
+  border-radius:18px;overflow:hidden;margin-bottom:18px;
+}
 .video-box.mid{aspect-ratio:16/9}
 .video-box iframe{width:100%;height:100%;border:0}
 
 .video-section-head{margin-bottom:12px}
-.video-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#1677ff;color:#fff;font-size:11px;font-weight:900;margin-bottom:6px}
-.video-section-title{font-size:22px;font-weight:900;letter-spacing:-.04em}
+.video-badge{
+  display:inline-block;padding:5px 9px;border-radius:999px;
+  background:#1677ff;color:#fff;font-size:12px;font-weight:900;margin-bottom:7px;
+}
+.video-section-title{
+  font-size:22px;font-weight:900;letter-spacing:-.04em;
+}
 
-.primary,.gray,.cta-main{width:100%;min-height:66px;border-radius:20px;font-size:21px;font-weight:900}
+.primary,.gray,.cta-main{
+  width:100%;min-height:66px;border-radius:16px;
+  font-size:21px;font-weight:900;
+}
 .primary{background:#1677ff;color:#fff}
 .gray{background:#eef2f7;color:#263445}
 .cta-main{margin-top:24px;background:#12b76a;color:#fff}
@@ -102,20 +203,44 @@ a{color:inherit;text-decoration:none}
 .actions{display:grid;gap:12px;margin-top:18px}
 
 .product-box{margin:18px 0}
-.box-title{font-size:20px;font-weight:900;margin-bottom:12px}
-.product-item{width:100%;display:block;padding:15px 16px;border-radius:16px;background:#fff;border:1px solid #e5edf5;margin-bottom:10px;font-size:18px;font-weight:900;text-align:left}
-.partner-note{margin-top:6px;font-size:12px;line-height:1.45;color:#667085}
+.box-title{
+  font-size:21px;font-weight:900;margin-bottom:12px;letter-spacing:-.04em;
+}
+.product-item{
+  width:100%;display:block;padding:16px;border-radius:14px;
+  background:#fff;border:1px solid #e5e8eb;margin-bottom:10px;
+  font-size:18px;font-weight:900;text-align:left;
+}
+.partner-note{
+  margin-top:6px;font-size:12px;line-height:1.45;color:#667085;
+}
 
-.related-article-box{margin-top:4px}
-.related-article-box .article-card{margin-bottom:10px}
+.ad-box{
+  margin:18px 0;padding:16px;border-radius:14px;
+  background:#f2f4f7;color:#667085;
+  font-size:14px;line-height:1.5;text-align:center;
+}
 
-.ad-box{margin:18px 0;padding:18px;border-radius:20px;background:#fff8e6;color:#6b4f00;font-size:17px;line-height:1.5;text-align:center}
-.mid-section{margin-top:22px;padding-top:20px;border-top:1px solid #e5edf5}
+.mid-section{
+  margin-top:22px;padding-top:20px;border-top:1px solid #e5e8eb;
+}
 .mid-item{margin-bottom:20px}
 .mid-item:last-child{margin-bottom:0}
 
-.primary:active,.gray:active,.cta-main:active,.product-item:active,.article-card:active,.category-tab:active,.pick-card:active{transform:scale(.96);filter:brightness(.97)}
-.footer{padding:18px 24px 32px;font-size:12px;line-height:1.5;color:#98a2b3}
+.primary:active,
+.gray:active,
+.cta-main:active,
+.product-item:active,
+.article-card:active,
+.category-tab:active,
+.pick-card:active{
+  transform:scale(.97);filter:brightness(.98);
+}
+
+.footer{
+  padding:18px 24px 32px;
+  font-size:12px;line-height:1.5;color:#98a2b3;
+}
 .app-version{margin-bottom:6px;font-weight:900;color:#1677ff}
 </style>
 </head>
@@ -138,22 +263,23 @@ a{color:inherit;text-decoration:none}
     <section id="home">
       <h1 class="home-title">어디가<br>불편하세요?</h1>
 
+      <section class="article-section">
+        <div class="search-box">
+          <input id="articleSearch" class="search-input" type="search" placeholder="증상이나 진료과를 검색해보세요">
+        </div>
+        <div class="category-tabs" id="categoryTabs"></div>
+      </section>
+
       <section class="curation-section" id="popularSection" style="display:none;">
         <div class="curation-head">
           <div class="curation-label">DOCTOR'S PICK</div>
-          <div class="curation-title">추천 건강 정보</div>
+          <div class="curation-title">오늘 많이 보는 건강 정보</div>
         </div>
         <div id="popularList"></div>
       </section>
 
       <section class="article-section">
         <div class="section-title">최신 건강 정보</div>
-
-        <div class="search-box">
-          <input id="articleSearch" class="search-input" type="search" placeholder="궁금한 증상을 검색해보세요">
-        </div>
-
-        <div class="category-tabs" id="categoryTabs"></div>
         <div id="articleList"></div>
       </section>
     </section>
@@ -164,7 +290,7 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.1.4</div>
+    <div class="app-version">닥터스위키 · v1.1.6</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
@@ -230,16 +356,16 @@ function formatContent(content){
 
 function categoryStyle(category){
   const styles={
-    "치과":{accent:"#1677ff",soft:"#eef6ff"},
-    "정형외과":{accent:"#7c3aed",soft:"#f3efff"},
-    "안과":{accent:"#0891b2",soft:"#ecfeff"},
-    "수면":{accent:"#4f46e5",soft:"#eef2ff"},
-    "내과":{accent:"#12b76a",soft:"#ecfdf3"},
+    "치과":{accent:"#1677ff",soft:"#f5f9ff"},
+    "정형외과":{accent:"#7c3aed",soft:"#f7f3ff"},
+    "안과":{accent:"#0891b2",soft:"#f0fcff"},
+    "수면":{accent:"#4f46e5",soft:"#f4f5ff"},
+    "내과":{accent:"#12b76a",soft:"#f1fdf6"},
     "피부과":{accent:"#f97316",soft:"#fff7ed"},
-    "이비인후과":{accent:"#db2777",soft:"#fdf2f8"}
+    "이비인후과":{accent:"#db2777",soft:"#fff1f7"}
   };
 
-  const s=styles[normalizeCategory(category)] || {accent:"#1677ff",soft:"#eef6ff"};
+  const s=styles[normalizeCategory(category)] || {accent:"#1677ff",soft:"#f5f9ff"};
   return `--accent:${s.accent};--soft:${s.soft};`;
 }
 
@@ -263,7 +389,7 @@ async function copyCurrentLink(btn){
   try{
     await navigator.clipboard.writeText(window.location.href);
     const original=btn.innerText;
-    btn.innerText="복사 완료 ✓";
+    btn.innerText="공유 링크 복사 완료 ✓";
     setTimeout(()=>{btn.innerText=original},1400);
   }catch(e){
     alert("복사에 실패했습니다. 주소창의 링크를 직접 복사해주세요.");
@@ -282,7 +408,6 @@ function updateMeta(article){
 function showIntro(){
   const intro=$("intro");
   if(!intro) return;
-
 
   setTimeout(()=>{
     intro.classList.add("intro-hide");
@@ -397,7 +522,7 @@ function renderArticles(){
   });
 
   if(filtered.length===0){
-    $("articleList").innerHTML=`<div class="empty-text">조건에 맞는 글이 없습니다.</div>`;
+    $("articleList").innerHTML=`<div class="empty-text">조건에 맞는 글이 없습니다. 다른 증상이나 진료과를 검색해보세요.</div>`;
     return;
   }
 
@@ -476,7 +601,7 @@ function showArticle(slug,changeUrl=true){
     </div>
 
     <div class="top-actions">
-      <button class="primary" type="button" id="copyTopBtn">🔗 링크 복사</button>
+      <button class="primary" type="button" id="copyTopBtn">📤 가족에게 공유하기</button>
     </div>
 
     ${article.video_short ? `
@@ -488,6 +613,25 @@ function showArticle(slug,changeUrl=true){
     <div class="card article-detail-body">
       ${formatContent(article.content || "")}
     </div>
+
+    ${relatedArticles.length>0 ? `
+      <div class="related-section">
+        <div class="related-section-title">이런 증상도 같이 확인해보세요</div>
+
+        ${relatedArticles.map(item=>`
+          <button
+            class="article-card related-card"
+            type="button"
+            data-slug="${safe(item.slug)}"
+            style="${categoryStyle(item.category)}"
+          >
+            <div class="article-category">${safe(item.category || "의료정보")}</div>
+            <div class="article-title">${safe(item.title)}</div>
+            <div class="article-summary">${safe(item.summary || "")}</div>
+          </button>
+        `).join("")}
+      </div>
+    ` : ""}
 
     ${article.cta_text ? `
       <button class="cta-main" type="button" data-url="${safe(article.clinic_link || "")}" data-click-type="clinic" data-click-key="${safe(article.slug)}">
@@ -537,32 +681,12 @@ function showArticle(slug,changeUrl=true){
     ` : ""}
 
     <div class="ad-box">
-      📢 관련 건강 정보<br>
-      AdSense 광고 삽입 위치
+      AD · 관련 건강 정보 광고 영역
     </div>
 
     <div class="actions">
-      <button class="primary" type="button" id="copyBottomBtn">🔗 링크 복사</button>
-
-      ${relatedArticles.length>0 ? `
-        <div class="related-article-box">
-          <div class="box-title">다른 건강 정보도 확인해보세요</div>
-          ${relatedArticles.map(item=>`
-            <button
-              class="article-card related-card"
-              type="button"
-              data-slug="${safe(item.slug)}"
-              style="${categoryStyle(item.category)}"
-            >
-              <div class="article-category">${safe(item.category || "의료정보")}</div>
-              <div class="article-title">${safe(item.title)}</div>
-              <div class="article-summary">${safe(item.summary || "")}</div>
-            </button>
-          `).join("")}
-        </div>
-      ` : ""}
-
-      <button class="gray" type="button" id="homeBtn">홈으로 가기</button>
+      <button class="primary" type="button" id="copyBottomBtn">📤 가족에게 공유하기</button>
+      <button class="gray" type="button" id="homeBtn">처음 화면으로</button>
     </div>
   `;
 
@@ -604,6 +728,7 @@ function goHome(){
 
 window.addEventListener("popstate",()=>{
   const path=decodeURIComponent(location.pathname.replace(/^\/+/,"").trim());
+
   if(path){
     const found=allArticles.find(article=>article.slug===path);
     if(found) showArticle(path,false);
