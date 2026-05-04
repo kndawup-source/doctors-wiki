@@ -736,22 +736,26 @@ async function increaseHelpfulCount(article,btn){
 
   if(localStorage.getItem(key)) return;
 
+  btn.disabled=true;
+
+  const {data,error}=await supabase.rpc("increment_helpful_count", {
+    target_article_id: article.id
+  });
+
+  if(error){
+    console.error(error);
+    btn.disabled=false;
+    alert("좋아요 저장에 실패했습니다. 다시 시도해주세요.");
+    return;
+  }
+
   localStorage.setItem(key,"1");
 
-  const newCount=(article.helpful_count || 0)+1;
+  const newCount=data || ((article.helpful_count || 0)+1);
   article.helpful_count=newCount;
 
   btn.classList.add("done");
   btn.innerHTML=`👍 감사합니다! <span>${newCount}</span>`;
-
-  const {error}=await supabase
-    .from("articles")
-    .update({helpful_count:newCount})
-    .eq("id",article.id);
-
-  if(error){
-    console.error(error);
-  }
 }
 
 function showArticle(slug,changeUrl=true){
