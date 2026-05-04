@@ -52,10 +52,8 @@ a{color:inherit;text-decoration:none}
   position:sticky;
   top:0;
   z-index:50;
-  padding:12px 0;
+  padding:12px 22px;
   margin:0 -22px 14px;
-  padding-left:22px;
-  padding-right:22px;
   border-bottom:1px solid #e5e8eb;
 }
 
@@ -64,9 +62,7 @@ a{color:inherit;text-decoration:none}
   align-items:center;
   gap:8px;
 }
-.search-box{
-  flex:1;
-}
+.search-box{flex:1}
 .search-input{
   width:100%;height:60px;padding:0 18px;
   border:1px solid #e5e8eb;border-radius:16px;background:#f5f7fa;
@@ -83,16 +79,30 @@ a{color:inherit;text-decoration:none}
   font-size:16px;
   font-weight:900;
 }
-.article-search-wrap.searching .search-cancel{
-  display:block;
-}
+.article-search-wrap.searching .search-cancel{display:block}
 
 .article-guide{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  min-height:42px;
+  padding:0 14px;
   margin:0 0 14px;
+  border:1px solid #edf0f3;
+  border-radius:14px;
+  background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+  box-shadow:0 4px 12px rgba(17,24,39,.03);
+}
+.article-guide .left{
   font-size:14px;
-  line-height:1.45;
-  color:#667085;
-  font-weight:700;
+  font-weight:900;
+  color:#111827;
+  letter-spacing:-.03em;
+}
+.article-guide .right{
+  font-size:12px;
+  font-weight:900;
+  color:#8a94a6;
 }
 
 .category-tabs{
@@ -200,6 +210,9 @@ a{color:inherit;text-decoration:none}
 .empty-text{
   padding:18px;border-radius:16px;background:#f8fafc;
   color:#667085;font-size:15px;line-height:1.55;
+}
+#articleList{
+  min-height:610px;
 }
 
 .result{display:none}
@@ -366,7 +379,8 @@ a{color:inherit;text-decoration:none}
         </div>
 
         <div id="articleGuide" class="article-guide">
-          최근 건강 정보 일부만 보여드려요. 검색하면 더 많은 정보를 찾을 수 있어요.
+          <div class="left">최근 건강 정보 5개</div>
+          <div class="right">전체 검색 가능</div>
         </div>
 
         <div class="category-tabs" id="categoryTabs"></div>
@@ -380,7 +394,7 @@ a{color:inherit;text-decoration:none}
   </main>
 
   <footer class="footer">
-    <div class="app-version">닥터스위키 · v1.2.3</div>
+    <div class="app-version">닥터스위키 · v1.2.4</div>
     <div>건강 정보는 참고용입니다. 진단과 치료는 의료진과 상담하세요.</div>
   </footer>
 </div>
@@ -396,7 +410,7 @@ const supabase = createClient(
 let allArticles=[];
 let selectedCategory="전체";
 let searchTimer=null;
-const DEFAULT_VISIBLE_COUNT=10;
+const DEFAULT_VISIBLE_COUNT=5;
 
 const $=id=>document.getElementById(id);
 
@@ -558,13 +572,8 @@ function renderCategoryTabs(){
 
       selectedCategory=btn.dataset.category;
 
-      if(searchInput){
-        searchInput.value="";
-      }
-
-      if(searchWrap){
-        searchWrap.classList.remove("searching");
-      }
+      if(searchInput) searchInput.value="";
+      if(searchWrap) searchWrap.classList.remove("searching");
 
       clearTimeout(searchTimer);
       renderCategoryTabs();
@@ -628,6 +637,28 @@ function renderPopularArticles(){
   });
 }
 
+function renderArticleGuide(isSearching,isCategoryFiltering,totalCount,visibleCount){
+  const guide=$("articleGuide");
+  if(!guide) return;
+
+  if(isSearching){
+    guide.innerHTML=`
+      <div class="left">검색 결과 ${totalCount}개</div>
+      <div class="right">전체 글 기준</div>
+    `;
+  }else if(isCategoryFiltering){
+    guide.innerHTML=`
+      <div class="left">${safe(selectedCategory)} ${totalCount}개</div>
+      <div class="right">카테고리 결과</div>
+    `;
+  }else{
+    guide.innerHTML=`
+      <div class="left">최근 건강 정보 ${visibleCount}개</div>
+      <div class="right">전체 검색 가능</div>
+    `;
+  }
+}
+
 function renderArticles(){
   const keyword=($("articleSearch").value || "").trim().toLowerCase();
   const isSearching=keyword.length>0;
@@ -647,15 +678,7 @@ function renderArticles(){
     filtered=filtered.slice(0,DEFAULT_VISIBLE_COUNT);
   }
 
-  if($("articleGuide")){
-    if(isSearching){
-      $("articleGuide").innerText=`검색 결과 ${totalCount}개의 건강 정보가 있습니다.`;
-    }else if(isCategoryFiltering){
-      $("articleGuide").innerText=`${selectedCategory} 건강 정보 ${totalCount}개를 보여드려요.`;
-    }else{
-      $("articleGuide").innerText=`최근 건강 정보 ${Math.min(DEFAULT_VISIBLE_COUNT,totalCount)}개를 먼저 보여드려요. 검색하면 전체 글에서 찾아볼 수 있어요.`;
-    }
-  }
+  renderArticleGuide(isSearching,isCategoryFiltering,totalCount,Math.min(DEFAULT_VISIBLE_COUNT,totalCount));
 
   if(filtered.length===0){
     $("articleList").innerHTML=`<div class="empty-text">조건에 맞는 글이 없습니다. 다른 증상이나 진료과를 검색해보세요.</div>`;
